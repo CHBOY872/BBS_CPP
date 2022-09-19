@@ -67,7 +67,7 @@ void EventSelector::Add(FdHandler *fh)
 {
     int fd = fh->GetFd();
     int i;
-    if (fd_array)
+    if (!fd_array)
     {
         fd_array_len = fd < current_max_count ? current_max_count : fd + 1;
         fd_array = new FdHandler *[fd_array_len];
@@ -81,7 +81,7 @@ void EventSelector::Add(FdHandler *fh)
         for (i = 0; i < fd; i++)
             tmp[i] = i < fd_array_len ? fd_array[i] : 0;
         fd_array_len = fd + 1;
-        delete fd_array;
+        delete[] fd_array;
         fd_array = tmp;
     }
     if (fd > max_fd)
@@ -195,6 +195,7 @@ Server *Server::Start(int port, EventSelector *_the_selector,
 
 void Server::RemoveClient(Client *cl)
 {
+    the_selector->Remove(cl);
     item **p;
     for (p = &first; *p; p = &((*p)->next))
     {
@@ -202,7 +203,7 @@ void Server::RemoveClient(Client *cl)
         {
             item *tmp = *p;
             *p = tmp->next;
-            delete tmp->cl;
+	    delete tmp->cl;
             delete tmp;
             return;
         }
@@ -215,7 +216,7 @@ void Server::Handle(bool r, bool w)
         return;
 
     struct sockaddr_in addr;
-    socklen_t len;
+    socklen_t len = 1;
     int cl_fd = accept(GetFd(), (struct sockaddr *)&addr, &len);
     if (-1 == cl_fd)
         return;
@@ -225,6 +226,7 @@ void Server::Handle(bool r, bool w)
     tmp->next = first;
     first = tmp;
 
+    the_selector->Add(tmp->cl);
     SendMsg(cl_fd, responds[4], sizeof(responds[4])); /* DIALOG */
     SendMsg(cl_fd, greetings_msg, sizeof(greetings_msg));
     SendMsg(cl_fd, account_have_msg, sizeof(account_have_msg));
@@ -431,7 +433,8 @@ void Client::Login(const char *str)
                             sizeof(type_nickname_msg));
     else
     {
-        int name_len = strlen(str);
+        user = new UserStructure;
+	int name_len = strlen(str);
         name = new char[name_len + 1];
         strcpy(name, str);
         name[name_len] = 0;
@@ -447,7 +450,7 @@ void Client::CheckPasswordCredentials(const char *str)
                             sizeof(type_password_msg));
     else
     {
-        if (-1 == the_master->user_db_handler->GetByName(name))
+        if (-1 == the_master->user_db_handler->GetByName(name, user))
         {
             delete[] name;
             name = 0;
@@ -479,6 +482,8 @@ void Client::CheckPasswordCredentials(const char *str)
                 step = step_authorization_uninitialized;
             }
         }
+	delete user;
+	user = 0;
     }
 }
 
@@ -541,7 +546,7 @@ void Client::CommandHandle(const char *str, char *q_flag)
                                     sizeof(login_msg) + 1];
             sprintf(to_msg, "%s%s", responds[4], login_msg);
             the_master->SendMsg(GetFd(), to_msg, strlen(to_msg) + 1);
-            free(to_msg);
+            delete[] to_msg;
         }
         else if (!strcmp(str, commands[3])) /* register */
         {
@@ -621,6 +626,7 @@ void Client::SetPermissions(const char *str)
     {
         the_master->file_db_handler->Add(file);
         delete file;
+	file = 0;
         char *to_msg = new char[strlen(responds[5]) +
                                 strlen(responds[2]) + 1];
         sprintf(to_msg, "%s%s", responds[2], responds[5]);
@@ -677,6 +683,7 @@ void Client::GetFile(const char *str)
         }
     }
     delete file;
+    file = 0;
 }
 
 int Client::ClientHandle(char *str)

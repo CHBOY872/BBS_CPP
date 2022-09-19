@@ -119,11 +119,13 @@ int main(int argc, const char **argv)
 
     EventSelector *sel = new EventSelector;
     Server *serv = Server::Start(port, sel, file_db, user_db, directory_path);
-    if (serv)
+    if (!serv)
     {
         perror("server");
         return 1;
     }
     sel->Run();
+    delete sel;
+    delete serv;
     return 0;
 }
