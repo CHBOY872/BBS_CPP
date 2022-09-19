@@ -1,5 +1,7 @@
 # FILE_SERVER_CPP
 
+FILE_SERVER_CPP is a FILE_SERVER which was rewrote to C++. The server was written in C++, the client in C
+
 File server is a server where you can save your files and download other files. Connect to server, log in or stay unauthorized.
 
 ## How to build
