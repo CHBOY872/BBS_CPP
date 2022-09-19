@@ -203,7 +203,7 @@ void Server::RemoveClient(Client *cl)
         {
             item *tmp = *p;
             *p = tmp->next;
-	    delete tmp->cl;
+            delete tmp->cl;
             delete tmp;
             return;
         }
@@ -434,7 +434,7 @@ void Client::Login(const char *str)
     else
     {
         user = new UserStructure;
-	int name_len = strlen(str);
+        int name_len = strlen(str);
         name = new char[name_len + 1];
         strcpy(name, str);
         name[name_len] = 0;
@@ -482,8 +482,8 @@ void Client::CheckPasswordCredentials(const char *str)
                 step = step_authorization_uninitialized;
             }
         }
-	delete user;
-	user = 0;
+        delete user;
+        user = 0;
     }
 }
 
@@ -626,7 +626,7 @@ void Client::SetPermissions(const char *str)
     {
         the_master->file_db_handler->Add(file);
         delete file;
-	file = 0;
+        file = 0;
         char *to_msg = new char[strlen(responds[5]) +
                                 strlen(responds[2]) + 1];
         sprintf(to_msg, "%s%s", responds[2], responds[5]);
