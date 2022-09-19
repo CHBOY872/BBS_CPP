@@ -1,9 +1,11 @@
 #!/bin/sh
 
 FILES="*.c *.h *.hpp *.cpp *.sh *.mk makefile PROTOCOL.txt
-file/*.c file/*.h file/*.hpp file/*.cpp
-user/*.c user/*.h user/*.hpp user/*.cpp
-server/*.c server/*.h server/*.hpp server/*.cpp"
+DbHandler/*.c DbHandler/*.h DbHandler/*.cpp DbHandler/*.hpp
+FileDbHandler/*.c FileDbHandler/*.h FileDbHandler/*.hpp FileDbHandler/*.cpp
+UserDbHandler/*.c UserDbHandler/*.h UserDbHandler/*.hpp UserDbHandler/*.cpp
+Server/*.c Server/*.h Server/*.hpp Server/*.cpp
+String/*.c String/*.h String/*.hpp String/*.cpp"
 
 for FILE in $FILES
 do 
