@@ -127,5 +127,7 @@ int main(int argc, const char **argv)
     sel->Run();
     delete sel;
     delete serv;
+    delete user_db;
+    delete file_db;
     return 0;
 }
