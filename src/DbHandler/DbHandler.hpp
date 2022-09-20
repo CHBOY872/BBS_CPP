@@ -34,4 +34,9 @@ public:
     const char *GetFilePath() { return file_path; }
 };
 
+struct Object
+{
+    virtual void Clear() = 0;
+};
+
 #endif

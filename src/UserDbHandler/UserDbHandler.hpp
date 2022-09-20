@@ -9,13 +9,13 @@
 #define USER_NAME 250
 #define USER_PASSWORD 250
 
-struct UserStructure
+struct UserStructure : Object
 {
     char nickname[USER_NAME];
     char password[USER_PASSWORD];
 
-    void Clear();
-    ~UserStructure() {}
+    virtual void Clear();
+    virtual ~UserStructure() {}
 };
 
 #endif

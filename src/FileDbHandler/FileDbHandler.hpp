@@ -9,14 +9,14 @@
 #define FILE_NAME_LEN 250
 #define USER_NICKNAME_LEN 250
 
-struct FileStructure
+struct FileStructure : Object
 {
     char file_name[FILE_NAME_LEN];
     char author_nickname[USER_NICKNAME_LEN];
     int perms;
 
-    void Clear();
-    ~FileStructure() {}
+    virtual void Clear();
+    virtual ~FileStructure() {}
 };
 
 #endif
