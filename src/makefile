@@ -10,7 +10,8 @@ RELEASE=-s
 ANSI=-ansi
 ISOSTD=
 
-SRCMODULES=String/String.cpp Server/Server.cpp UserDbHandler/UserDbHandler.cpp FileDbHandler/FileDbHandler.cpp 
+SRCMODULES=String/String.cpp Server/Server.cpp \
+UserDbHandler/UserDbHandler.cpp FileDbHandler/FileDbHandler.cpp 
 HDRMODULES=$(SRCMODULES:.cpp=.hpp)
 OBJMODULES=$(SRCMODULES:.cpp=.o)
 
